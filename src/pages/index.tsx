@@ -1,6 +1,6 @@
 import styles from '@/styles/portfolio.module.css';
 import SplitText from '@/components/SplitText';
-import Plasma from '@/components/Plasma';
+import Particles from '@/components/Particles';
 import SpotlightCard from "@/components/Spotlightcard";
 import BlurText from "@/components/BlurText";
 import RotatingText from "@/components/RotatingText";
@@ -8,6 +8,10 @@ import GooeyNav from '@/components/GooeyNav';
 import ScrollReveal from '@/components/ScrolReveal';
 import ElectricBorder from '@/components/EletricBorder';
 import { useGitHubProjects } from "@/hooks/Git_pegar";
+import { FaGithub, FaStar, FaCodeBranch } from 'react-icons/fa';
+import MagicBento from '@/components/MagicBento';
+
+
 
 /* IGNORAR */
 const handleAnimationComplete = () => {
@@ -27,17 +31,20 @@ export default function Home() {
   return (
     <div className={styles.background} style={{ position: 'relative', zIndex: 0 }}>
 
-      {/* PLASMA - background */}
+      {/* PARTICLES - background */}
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
-        <Plasma
-          color="#3B59B3"
-          speed={0.2}
-          direction="forward"
-          scale={1}
-          opacity={0.8}
-          mouseInteractive={false}
+        <Particles
+          particleColors={['#ffffff', '#ffffff']}
+          particleCount={3000}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={false}
+          alphaParticles={false}
+          disableRotation={false}
         />
       </div>
+
 
       {/* IMPORTAÇÃO DE FONTES */}
       <div>
@@ -48,7 +55,7 @@ export default function Home() {
 
       {/* NAVBAR FIXA NO TOPO COM Z-INDEX ALTO */}
       <div
-        className="fixed top-0 left-0 right-0 flex justify-center items-start"
+        className="fixed top-0 left-0 right-0 flex justify-start items-start"
         style={{ zIndex: 9999 }}
       >
         <GooeyNav
@@ -121,7 +128,7 @@ export default function Home() {
 
             <SpotlightCard
               className="custom-spotlight-card w-full max-w-2xl px-8 py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-              spotlightColor="rgba(255, 255, 255, 0.1)"
+              spotlightColor="rgba(98, 238, 252, 0.22)"
             >
               <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
                 Olá! Meu nome é <span className="font-bold text-cyan-400">David</span>, sou um desenvolvedor
@@ -145,7 +152,7 @@ export default function Home() {
 
             <SpotlightCard
               className="custom-spotlight-card w-full max-w-2xl px-8 py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-              spotlightColor="rgba(255, 255, 255, 0.1)"
+              spotlightColor="rgba(98, 238, 252, 0.22)"
             >
               <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
                 Concluí o curso técnico em <span className="font-semibold text-cyan-400">Desenvolvimento de Sistemas</span> na
@@ -190,7 +197,7 @@ export default function Home() {
 
         <SpotlightCard
           className="custom-spotlight-card w-full max-w-2xl mt-15 px-8 py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-          spotlightColor="rgba(255, 255, 255, 0.1)"
+          spotlightColor="rgba(98, 238, 252, 0.22)"
         >
           <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
             Eu tenho experiência com diversas tecnologias essenciais para desenvolvimento web e design, incluindo{' '}
@@ -223,37 +230,89 @@ export default function Home() {
 
         <div className='mt-25'>
 
+
           {projects.map(projeto => (
             <ElectricBorder
               key={projeto.id}
-              color="#7df9ff"
+              color="#FFFFFF"
               speed={1}
               chaos={0.5}
               thickness={2}
               style={{ borderRadius: 16 }}
             >
-              <div className="text-white p-6 mb-8 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] rounded-xl shadow-lg hover:shadow-cyan-500 transition-shadow duration-300">
-                <h3 className="text-3xl font-bold mb-3 p-2 border-b border-cyan-400">
-                  {projeto.name}
-                </h3>
+              <div className="bg-gray-800 text-white w-[700px] text-2xl p-6 mb-8 rounded-lg shadow-lg hover:bg-gray-700 transition-colors duration-300">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-3xl font-bold p-2  border-cyan-400 flex-1">
+                    {projeto.name}
+                  </h3>
+                  <a
+                    href={projeto.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-cyan-300 ml-4"
+                    title="Ver no GitHub"
+                  >
+                    <FaGithub size={32} /> {/* aumenta o Github */}
+                  </a>
+                </div>
                 <p className="text-gray-300 mb-4 min-h-[3rem]">
                   {projeto.description || 'Sem descrição'}
                 </p>
-                <p className="flex flex-wrap items-center gap-3 text-cyan-300 text-sm font-semibold border-t border-cyan-400 pt-3">
+                <p className="flex flex-wrap items-center gap-5 text-cyan-300 text-sm font-semibold border-cyan-400 pt-3">
                   {projeto.language && (
                     <span className="bg-cyan-700 px-3 py-1 rounded-full">
                       {projeto.language}
                     </span>
                   )}
                   {projeto.language && <span className="opacity-50">|</span>}
-                  <span>⭐ {projeto.stargazers_count}</span>
-                  <span>🍴 {projeto.forks_count}</span>
+                  <span className="flex items-center gap-1">
+                    <FaStar size={20} className="text-yellow-400" /> {projeto.stargazers_count}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FaCodeBranch size={20} /> {projeto.forks_count}
+                  </span>
                 </p>
               </div>
             </ElectricBorder>
           ))}
-          </div>
+        </div>
       </section >
+
+      {/* contato */}
+
+      <section
+        className="w-full flex flex-col items-center justify-center px-4 sm:px-8 mt-10 mb-32"
+        style={{ zIndex: 20, position: 'relative' }}>
+
+        <BlurText
+          text="Contato"
+          delay={150}
+          animateBy="words"
+          direction="top"
+          onAnimationComplete={handleAnimationComplete}
+          className="text-5xl sm:text-6xl mb-8 text-white"
+        />
+
+        
+          <MagicBento
+            textAutoHide={true}
+            enableStars={true}
+            enableSpotlight={true}
+            enableBorderGlow={true}
+            enableTilt={true}
+            enableMagnetism={true}
+            clickEffect={true}
+            spotlightRadius={300}
+            particleCount={12}
+            glowColor="41, 246, 255"
+          />
+        
+
+
+
+      </section>
+
+
     </div >
   );
 }
