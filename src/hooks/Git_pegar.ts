@@ -31,11 +31,10 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
+             const response = await fetch(
           `https://api.github.com/users/${username}/repos?sort=updated&per_page=${limit}&type=all`,
           {
             headers: {
-              'Authorization': `token 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`,
               'Accept': 'application/vnd.github.v3+json'
             }
           }
@@ -46,7 +45,7 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
         }
 
         const data = await response.json();
-        
+
         const filteredProjects = data
           .filter((repo: any) => !repo.fork && repo.size > 0)
           .slice(0, limit)

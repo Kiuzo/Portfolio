@@ -31,6 +31,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   const filterRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(initialActiveIndex);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
   const getXY = (distance: number, pointIndex: number, totalPoints: number): [number, number] => {
@@ -101,6 +102,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     const liEl = e.currentTarget;
     if (activeIndex === index) return;
     setActiveIndex(index);
+    setMobileMenuOpen(false);
     updateEffectPosition(liEl);
     if (filterRef.current) {
       const particles = filterRef.current.querySelectorAll('.particle');
@@ -148,7 +150,6 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
 
   return (
     <>
-      {/* Estilos para o efeito */}
       <style>
         {`
           :root {
@@ -161,6 +162,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             display: grid;
             place-items: center;
             z-index: 1;
+            border-radius: 9999px;
           }
           .effect.text {
             color: white;
@@ -170,20 +172,9 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             color: black;
           }
           .effect.filter {
-            /* Blur e fundo preto removidos */
             filter: none;
             mix-blend-mode: lighten;
           }
-          /* Removi completamente o ::before que adicionava fundo preto */
-          /*
-          .effect.filter::before {
-            content: "";
-            position: absolute;
-            inset: -75px;
-            z-index: -2;
-            background: black;
-          }
-          */
           .effect.filter::after {
             content: "";
             position: absolute;
@@ -282,17 +273,105 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             content: "";
             position: absolute;
             inset: 0;
-            border-radius: 8px;
+            border-radius: 9999px;
             background: white;
             opacity: 0;
             transform: scale(0);
             transition: all 0.3s ease;
             z-index: -1;
           }
+          
+          .hamburger-button {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 10001;
+          }
+          
+          .hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: white;
+            display: block;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+          }
+          
+          .hamburger-button.open .hamburger-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+          }
+          
+          .hamburger-button.open .hamburger-line:nth-child(2) {
+            opacity: 0;
+          }
+          
+          .hamburger-button.open .hamburger-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+          }
+          
+          /* Responsividade para mobile */
+          @media (max-width: 768px) {
+            .hamburger-button {
+              display: block;
+            }
+            
+            .gooey-nav-container nav {
+              position: fixed;
+              top: 0;
+              right: -100%;
+              width: 70%;
+              height: 100vh;
+              background: rgba(0, 0, 0, 0.95);
+              backdrop-filter: blur(10px);
+              transition: right 0.3s ease;
+              z-index: 10000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .gooey-nav-container nav.mobile-open {
+              right: 0;
+            }
+            
+            .gooey-nav-container ul {
+              flex-direction: column;
+              gap: 2rem;
+              padding: 2rem;
+              align-items: center;
+            }
+            
+            .gooey-nav-container li {
+              width: 100%;
+              text-align: center;
+            }
+            
+            .gooey-nav-container li a {
+              display: block;
+              padding: 1rem 2rem;
+              font-size: 1.2rem;
+            }
+            
+            .effect {
+              display: none !important;
+            }
+          }
         `}
       </style>
-      <div className="relative z-[9999999]" ref={containerRef}>
-        <nav className="flex relative" style={{ transform: 'translate3d(0,0,0.01px)' }}>
+      <div className="gooey-nav-container relative z-[9999999]" ref={containerRef}>
+        <button 
+          className={`hamburger-button ${mobileMenuOpen ? 'open' : ''}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Menu"
+        >
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+        </button>
+        
+        <nav className={`flex relative ${mobileMenuOpen ? 'mobile-open' : ''}`} style={{ transform: 'translate3d(0,0,0.01px)' }}>
           <ul
             ref={navRef}
             className="flex gap-8 list-none p-0 px-4 m-0 relative z-[9999999]"
