@@ -88,7 +88,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="fixed top-0 left-0 right-0 flex justify-start items-start" style={{ zIndex: 9999, height: '80px' }}>
+        <div className="fixed top-0 mt-4 left-0 right-0 flex justify-start items-start" style={{ zIndex: 9999, height: '80px' }}>
           <GooeyNav
             items={items}
             particleCount={15}
