@@ -11,7 +11,7 @@ export function Projects() {
 
             <SplitText
                 text="Meus Projetos"
-                className="text-3xl sm:text4xl lg:text-5xl font-semibold text-center text-white"
+                className="text-4xl sm:text5xl lg:text-6xl font-semibold text-center text-white"
                 delay={100}
                 duration={0.6}
                 ease="power3.out"
