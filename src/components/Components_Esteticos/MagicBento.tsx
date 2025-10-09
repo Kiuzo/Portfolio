@@ -19,6 +19,7 @@ export interface BentoProps {
     spotlightRadius?: number;
     enableTilt?: boolean;
     glowColor?: string;
+    enableStars?: boolean;
 }
 
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
