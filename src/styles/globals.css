@@ -1,67 +1,22 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-body {
-   font-family: "JetBrains Mono", monospace;  
+.particlesBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-html {
-  /* Scroll suave mais customizado */
+body,
+html, 
+* {
+  font-family: "JetBrains Mono", monospace;
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* Compensa a navbar fixa */
+  scroll-padding-top: 80px;
 }
 
-/* Versão mais suave para browsers que suportam */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Transição customizada para scroll */
-  * {
-    scroll-behavior: smooth;
-  }
-}
-
-/* Respeita preferência de usuários que querem menos movimento */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Ajuste específico para as seções */
-#principal, 
-#sobremim, 
-#projetos, 
-#contato {
-  scroll-margin-top: 80px; /* Offset para navbar fixa */
-}
-
-/* Melhora a suavidade em navegadores Webkit (Safari/Chrome) */
-@supports (-webkit-overflow-scrolling: touch) {
-  html {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-/* Animação de scroll mais suave via CSS custom properties */
-@keyframes smoothScroll {
-  from {
-    scroll-behavior: auto;
-  }
-  to {
-    scroll-behavior: smooth;
-  }
-}
-
-/* Aplica a animação quando necessário */
-html.scrolling {
-  animation: smoothScroll 0.1s ease-in-out;
-}
