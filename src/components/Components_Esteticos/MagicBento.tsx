@@ -20,6 +20,9 @@ export interface BentoProps {
     enableTilt?: boolean;
     glowColor?: string;
     enableStars?: boolean;
+    enableMagnetism?: boolean;
+    clickEffect?: boolean;
+    particleCount?: number;
 }
 
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
@@ -210,7 +213,11 @@ const MagicBento: React.FC<BentoProps> = ({
     disableAnimations = false,
     spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
     enableTilt = true,
-    glowColor = DEFAULT_GLOW_COLOR
+    glowColor = DEFAULT_GLOW_COLOR,
+    enableStars = false,
+    enableMagnetism = false,
+    clickEffect = false,
+    particleCount = 0
 }) => {
     const gridRef = useRef<HTMLDivElement>(null);
     const isMobile = useMobileDetection();
