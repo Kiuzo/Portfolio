@@ -60,7 +60,7 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
           {
             headers: {
               'Accept': 'application/vnd.github.v3+json',
-              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}` 
             },
             signal: abortControllerRef.current.signal
           }
