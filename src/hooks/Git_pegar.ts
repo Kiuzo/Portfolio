@@ -39,11 +39,17 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
     }
 
     const fetchProjects = async () => {
+      // DEBUG: Verifica se o token está sendo lido
+      console.log('🔑 Token:', process.env.NEXT_PUBLIC_GITHUB_TOKEN ? 'Presente' : 'AUSENTE');
+      console.log('👤 Username:', username);
+      console.log('📊 Limit:', limit);
+
       // Verifica cache primeiro
       const cacheKey = `${username}-${limit}`;
       const cached = cache.get(cacheKey);
-
+      
       if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        console.log('✅ Usando dados do cache');
         setProjects(cached.data);
         setLoading(false);
         return;
@@ -55,12 +61,14 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
 
         abortControllerRef.current = new AbortController();
 
+        console.log('🚀 Fazendo requisição para API do GitHub...');
+
         const response = await fetch(
           `https://api.github.com/users/${username}/repos?sort=updated&per_page=${limit}&type=owner`,
           {
             headers: {
               'Accept': 'application/vnd.github.v3+json',
-              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}` 
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`
             },
             signal: abortControllerRef.current.signal
           }
@@ -69,15 +77,17 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
         // Captura informações de rate limit
         const remaining = response.headers.get('X-RateLimit-Remaining');
         const resetTime = response.headers.get('X-RateLimit-Reset');
-
+        
         if (remaining) {
           setRemainingRequests(parseInt(remaining));
-          console.log(`Requisições restantes: ${remaining}`);
-
+          console.log(`📊 Requisições restantes: ${remaining}`);
+          
           if (parseInt(remaining) < 10) {
             console.warn('⚠️ Poucas requisições restantes!');
           }
         }
+
+        console.log('📡 Status da resposta:', response.status);
 
         if (!response.ok) {
           if (response.status === 403) {
@@ -86,10 +96,14 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
               `Rate limit excedido! Redefine em: ${reset?.toLocaleTimeString() || 'desconhecido'}`
             );
           }
+          if (response.status === 401) {
+            throw new Error('Token inválido ou não configurado. Verifique NEXT_PUBLIC_GITHUB_TOKEN');
+          }
           throw new Error(`Erro ao buscar repositórios: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log(`✅ ${data.length} repositórios encontrados`);
 
         const filteredProjects = data
           .filter((repo: any) => !repo.fork && repo.size > 0)
@@ -108,6 +122,8 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
             forks_count: repo.forks_count
           }));
 
+        console.log(`✅ ${filteredProjects.length} projetos após filtro`);
+
         // Salva no cache
         cache.set(cacheKey, {
           data: filteredProjects,
@@ -117,10 +133,12 @@ export const useGitHubProjects = (username: string, limit: number = 6): UseGitHu
         setProjects(filteredProjects);
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') {
-          return; // Requisição cancelada, ignora
+          console.log('🚫 Requisição cancelada');
+          return;
         }
-        setError(err instanceof Error ? err.message : 'Erro desconhecido');
-        console.error('Erro ao buscar projetos:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+        setError(errorMessage);
+        console.error('❌ Erro ao buscar projetos:', errorMessage);
       } finally {
         setLoading(false);
       }
