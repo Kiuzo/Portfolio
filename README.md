@@ -1,43 +1,16 @@
-<div align=center>
+<div align="center">
 
-## Meu Portfólio
+# PORTFOLIO
 
 </div>
 
-Bem-vindo! Aqui você vai encontrar meus projetos, aprendizados e contribuições — tudo para mostrar minha jornada como desenvolvedor.
+Este é o repositório do meu portfólio — um espaço onde reúno projetos práticos que mostram meu trabalho com **JavaScript**, **TypeScript** e **React**.  
+Aqui você encontrará exemplos de aplicações bem estruturadas, com foco em **código limpo**, **usabilidade** e **desempenho**.
 
-## 🔍 Sobre mim
+Sempre estou aprendendo, experimentando novas ferramentas e técnicas, e tento aplicar isso nos projetos que compartilho aqui. Se algo chamar sua atenção ou você quiser trocar uma ideia, ficarei feliz em conversar.
 
-Sou o David, desenvolvedor com foco em Front-end.
+<div align="center">
 
-Apaixonado por Tecnologias e Frameworks como JavaScript, React, TailWind, HTML, CSS, etc.
+**[🌐 Ver Portfolio ao vivo](https://kiuzo.vercel.app)**
 
-Gosto de resolver problemas, aprender novas tecnologias e construir soluções que tenham impacto real
-  
-## 🚀 O que você encontra aqui
-
-Projetos pessoais com código aberto.
-
-Portfólio que mostra não só o que fiz, mas como fiz — o raciocínio, os desafios e as soluções que apliquei
-
-Documentação clara de cada projeto, com instruções (instalação, execução, features)
-
-## 🛠 Tecnologias & Ferramentas
-
-Entre as que mais uso:
-
-Linguagens: HTML, CSS, JAVASCRIPT, MYSQL & TYPESCRIPT
-
-Frameworks / Bibliotecas: REACT, TAILWIND & BOOTSTRAP
-
-Ferramentas: GIT, GITHUB & FIGMA
-
-##  📂 Organização
-
-O repositório está estruturado de forma que fique fácil navegar pelos projetos — cada um está em sua pasta própria, com README próprios, exemplos e, quando aplicável, versão deployada / demo.
-
-## 📫 Contato
-
-Se quiser entrar em contato, discutir algo, sugerir melhorias ou colaborar:
-
-E-mail: david.soares2411@gmail.com
+</div>
