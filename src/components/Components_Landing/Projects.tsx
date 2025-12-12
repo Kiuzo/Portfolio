@@ -7,7 +7,7 @@ export function Projects() {
     const { projects, loading, error } = useGitHubProjects('Kiuzo', 6);
 
     return (
-        <section id="projetos" className='flex flex-col justify-center mt-60 px-4'>
+        <section id="projetos" className="flex flex-col justify-center items-center min-h-screen relative  ">
 
             <SplitText
                 text="Meus Projetos"

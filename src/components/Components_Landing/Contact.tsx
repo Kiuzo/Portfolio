@@ -4,7 +4,7 @@ import MagicBento from '@/components/Components_Esteticos/MagicBento';
 export function Contact() {
     return (
 
-        <section id="contato" className="flex flex-col items-center mt-60">
+        <section id="contato" className="flex flex-col justify-center items-center min-h-screen relative  ">
 
             <BlurText
                 text="Contato"

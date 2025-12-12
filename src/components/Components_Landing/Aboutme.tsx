@@ -4,7 +4,7 @@ import RotatingText from "@/components/Components_Esteticos/RotatingText";
 
 export function AboutMe() {
     return (
-        <section id="sobremim" className="flex justify-center px-4">
+        <section id="sobremim" className="min-h-screen flex justify-center px-4">
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl w-full">
 
