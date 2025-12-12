@@ -6,7 +6,7 @@ export function Contact() {
 
         <section
             id="contato"
-            className="flex flex-col justify-center items-center min-h-screen relative p-4 sm:p-8"
+            className="min-h-[200vh] flex flex-col justify-center items-center relative p-4 sm:p-8 "
         >
 
             <BlurText

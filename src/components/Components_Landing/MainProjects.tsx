@@ -39,7 +39,7 @@ export function MainProjects() {
                 animateBy="words"
                 direction="top"
                 onAnimationComplete={() => { }}
-                className="text-4xl sm:text-5xl md:text-6xl mb-12 text-white text-center"
+                className="text-center justify-center text-4xl sm:text-3xl md:text-6xl mb-12 text-white "
             />
 
             {/* Grid de Projetos */}

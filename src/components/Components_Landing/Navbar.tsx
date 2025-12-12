@@ -8,7 +8,7 @@ interface NavItem {
 const items: NavItem[] = [
     { label: "Principal", href: "#principal" },
     { label: "Sobre mim", href: "#sobremim" },
-    { label: "Prinipais Projetos", href: "#principaisprojetos" },
+    { label: "Principais Projetos", href: "#principaisprojetos" },
     { label: "Projetos", href: "#projetos" },
     { label: "Contato", href: "#contato" },
 ];
