@@ -1,79 +1,74 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-interface GitHubRepo {
-  id: number;
-  name: string;
-  description: string;
-  html_url: string;
-  homepage?: string;
-  language?: string;
-  topics: string[];
-  created_at: string;
-  updated_at: string;
-  stargazers_count: number;
-  forks_count: number;
-  fork: boolean;
-  size: number;
+import type { GitHubProject, GitHubApiResponse } from '@/types';
+import { API_CONFIG } from '@/config/constants';
+
+interface CacheEntry {
+  data: GitHubProject[];
+  timestamp: number;
+  remaining: number;
 }
 
-interface ApiResponse {
-  data?: GitHubRepo[];
-  remaining?: number;
-  error?: string;
-}
+const cache = new Map<string, CacheEntry>();
 
-const cache = new Map<string, { data: GitHubRepo[]; timestamp: number; remaining: number }>();
-const CACHE_DURATION = 5 * 60 * 1000;
-
+/**
+ * API handler para buscar repositórios do GitHub
+ * @param req - Request do Next.js
+ * @param res - Response do Next.js
+ */
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponse>
-) {
+  res: NextApiResponse<GitHubApiResponse>
+): Promise<void> {
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
-  const { username, limit = '6' } = req.query;
+  const { username, limit = String(API_CONFIG.DEFAULT_LIMIT) } = req.query;
 
   if (!username || typeof username !== 'string') {
-    return res.status(400).json({ error: 'Username é obrigatório' });
+    res.status(400).json({ error: 'Username é obrigatório' });
+    return;
   }
 
   const limitNum = parseInt(limit as string);
 
-  if (isNaN(limitNum) || limitNum < 1 || limitNum > 100) {
-    return res.status(400).json({ error: 'Limit deve ser entre 1 e 100' });
+  if (isNaN(limitNum) || limitNum < API_CONFIG.MIN_LIMIT || limitNum > API_CONFIG.MAX_LIMIT) {
+    res.status(400).json({
+      error: `Limit deve ser entre ${API_CONFIG.MIN_LIMIT} e ${API_CONFIG.MAX_LIMIT}`,
+    });
+    return;
   }
 
   const cacheKey = `${username}-${limitNum}`;
   const cached = cache.get(cacheKey);
 
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    console.log('✅ Cache hit para', username);
-    return res.status(200).json({
+  if (cached && Date.now() - cached.timestamp < API_CONFIG.CACHE_DURATION) {
+    res.status(200).json({
       data: cached.data,
-      remaining: cached.remaining
+      remaining: cached.remaining,
     });
+    return;
   }
 
   try {
     const githubToken = process.env.GITHUB_TOKEN;
 
     if (!githubToken) {
-      console.error('❌ GITHUB_TOKEN não configurado');
-      return res.status(500).json({ error: 'Token do GitHub não configurado' });
+      console.error('GITHUB_TOKEN não configurado');
+      res.status(500).json({ error: 'Token do GitHub não configurado' });
+      return;
     }
 
-    console.log('🚀 Buscando repositórios de', username);
-
     const response = await fetch(
-      `https://api.github.com/users/${username}/repos?sort=updated&per_page=${limitNum}&type=owner`,
+      `${API_CONFIG.GITHUB_API_URL}/users/${username}/repos?sort=updated&per_page=${limitNum}&type=owner`,
       {
         headers: {
           'Accept': 'application/vnd.github.v3+json',
           'Authorization': `Bearer ${githubToken}`,
-          'User-Agent': 'Portfolio-App'
-        }
+          'User-Agent': 'Portfolio-App',
+        },
       }
     );
 
@@ -81,54 +76,52 @@ export default async function handler(
     const resetTime = response.headers.get('X-RateLimit-Reset');
     const remainingNum = remaining ? parseInt(remaining) : null;
 
-    if (remainingNum !== null) {
-      console.log(`📊 Requisições restantes: ${remainingNum}`);
-    }
-
     if (!response.ok) {
       if (response.status === 403) {
         const reset = resetTime ? new Date(parseInt(resetTime) * 1000) : null;
-        return res.status(403).json({
-          error: `Rate limit excedido! Redefine em: ${reset?.toLocaleTimeString() || 'desconhecido'}`
+        res.status(403).json({
+          error: `Rate limit excedido! Redefine em: ${reset?.toLocaleTimeString() || 'desconhecido'}`,
         });
+        return;
       }
       if (response.status === 401) {
-        return res.status(401).json({ error: 'Token inválido' });
+        res.status(401).json({ error: 'Token inválido' });
+        return;
       }
       if (response.status === 404) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        res.status(404).json({ error: 'Usuário não encontrado' });
+        return;
       }
-      return res.status(response.status).json({ error: `Erro ao buscar repositórios: ${response.status}` });
+      res.status(response.status).json({
+        error: `Erro ao buscar repositórios: ${response.status}`,
+      });
+      return;
     }
 
-    const repos: GitHubRepo[] = await response.json();
-    console.log(`✅ ${repos.length} repositórios encontrados`);
+    const repos: GitHubProject[] = await response.json();
 
     const filteredRepos = repos
       .filter((repo) => !repo.fork && repo.size > 0)
       .slice(0, limitNum);
 
-    console.log(`✅ ${filteredRepos.length} projetos após filtro`);
-
     if (remainingNum !== null) {
       cache.set(cacheKey, {
         data: filteredRepos,
         timestamp: Date.now(),
-        remaining: remainingNum
+        remaining: remainingNum,
       });
     }
 
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
 
-    return res.status(200).json({
+    res.status(200).json({
       data: filteredRepos,
-      remaining: remainingNum || undefined
+      remaining: remainingNum || undefined,
     });
-
   } catch (error) {
-    console.error('❌ Erro ao buscar projetos:', error);
-    return res.status(500).json({
-      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    console.error('Erro ao buscar projetos:', error);
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Erro desconhecido',
     });
   }
 }

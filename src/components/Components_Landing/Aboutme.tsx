@@ -1,85 +1,78 @@
-import SpotlightCard from "@/components/Components_Esteticos/Spotlightcard";
-import BlurText from "@/components/Components_Esteticos/BlurText";
-import RotatingText from "@/components/Components_Esteticos/RotatingText";
+import SpotlightCard from '@/components/Components_Esteticos/Spotlightcard';
+import BlurText from '@/components/Components_Esteticos/BlurText';
+import {
+    BLUR_TEXT_CONFIG,
+    SPOTLIGHT_CARD_CONFIG,
+    SPACING,
+    TYPOGRAPHY,
+} from '@/config/constants';
 
+/**
+ * Componente AboutMe - Seção "Sobre mim"
+ * Exibe informações pessoais, educação e tecnologias
+ */
 export function AboutMe() {
     return (
-        <section id="sobremim" className="min-h-screen flex justify-center px-4">
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl w-full">
-
+        <section id="sobremim" className={`min-h-screen flex justify-center items-center ${SPACING.SECTION_PADDING}`}>
+            <div className={`grid grid-cols-1 lg:grid-cols-2 ${SPACING.CARD_GAP} lg:gap-12 ${SPACING.CONTAINER_MAX_WIDTH}`}>
                 <div className="flex flex-col items-center">
-
                     <BlurText
                         text="Sobre mim"
-                        delay={150}
-                        animateBy="words"
-                        direction="top"
-                        onAnimationComplete={() => { }}
-                        className="text-5xl sm:text-6xl mb-8 text-white"
+                        delay={BLUR_TEXT_CONFIG.DELAY}
+                        animateBy={BLUR_TEXT_CONFIG.ANIMATE_BY}
+                        direction={BLUR_TEXT_CONFIG.DIRECTION}
+                        className={`${TYPOGRAPHY.SECTION_TITLE} ${SPACING.SECTION_TITLE_MB} text-white`}
                     />
 
                     <SpotlightCard
-                        className="custom-spotlight-card w-full max-w-2xl px-8 py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-                        spotlightColor="rgba(98, 238, 252, 0.22)"
+                        className={`custom-spotlight-card w-full max-w-2xl ${SPACING.CARD_PADDING} rounded-xl border border-white/10 bg-white/5 shadow-lg`}
+                        spotlightColor={SPOTLIGHT_CARD_CONFIG.SPOTLIGHT_COLOR}
                     >
-
-                        <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
+                        <p className={`text-white ${TYPOGRAPHY.PARAGRAPH} leading-relaxed text-left`}>
                             Olá! Meu nome é <span className="font-bold text-cyan-400">David</span>, sou um desenvolvedor
                             front-end apaixonado por criar experiências digitais interativas e modernas.
                             Gosto de trabalhar com <span className="font-semibold text-purple-300">React, Tailwind e animações</span> que dão vida aos projetos.
                             Estou sempre aprendendo novas tecnologias e buscando aprimorar minhas habilidades.
                         </p>
-
                     </SpotlightCard>
-
                 </div>
 
                 <div className="flex flex-col items-center">
-
                     <BlurText
                         text="Educação"
-                        delay={150}
-                        animateBy="words"
-                        direction="top"
-                        onAnimationComplete={() => { }}
-                        className="text-5xl sm:text-6xl mb-8 text-white"
+                        delay={BLUR_TEXT_CONFIG.DELAY}
+                        animateBy={BLUR_TEXT_CONFIG.ANIMATE_BY}
+                        direction={BLUR_TEXT_CONFIG.DIRECTION}
+                        className={`${TYPOGRAPHY.SECTION_TITLE} ${SPACING.SECTION_TITLE_MB} text-white`}
                     />
 
                     <SpotlightCard
-                        className="custom-spotlight-card w-full max-w-2xl px-8 py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-                        spotlightColor="rgba(98, 238, 252, 0.22)"
+                        className={`custom-spotlight-card w-full max-w-2xl ${SPACING.CARD_PADDING} rounded-xl border border-white/10 bg-white/5 shadow-lg`}
+                        spotlightColor={SPOTLIGHT_CARD_CONFIG.SPOTLIGHT_COLOR}
                     >
-
-                        <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
+                        <p className={`text-white ${TYPOGRAPHY.PARAGRAPH} leading-relaxed text-left`}>
                             Concluí o curso técnico em <span className="font-semibold text-cyan-400">Desenvolvimento de Sistemas</span> na
                             <span className="font-bold text-purple-300"> ETEC Jardim Ângela</span>. Durante esse período,
                             aprendi sobre lógica de programação, banco de dados, desenvolvimento web e mobile,
                             além de ter contato com metodologias ágeis e ferramentas de versionamento como o Git.
                         </p>
-
                     </SpotlightCard>
-
                 </div>
 
                 <div className="flex flex-col lg:col-span-2">
-
                     <BlurText
                         text="Tecnologias"
-                        delay={150}
-                        animateBy="words"
-                        direction="top"
-                        onAnimationComplete={() => { }}
-                        className="text-5xl sm:text-6xl mb-8  text-white text-center justify-center"
+                        delay={BLUR_TEXT_CONFIG.DELAY}
+                        animateBy={BLUR_TEXT_CONFIG.ANIMATE_BY}
+                        direction={BLUR_TEXT_CONFIG.DIRECTION}
+                        className={`${TYPOGRAPHY.SECTION_TITLE} ${SPACING.SECTION_TITLE_MB} text-white text-center justify-center`}
                     />
 
-
                     <SpotlightCard
-                        className="custom-spotlight-card w-full px-6 sm:px-8 py-8 sm:py-10 rounded-xl border border-white/10 bg-white/5 shadow-lg"
-                        spotlightColor="rgba(98, 238, 252, 0.22)"
+                        className={`custom-spotlight-card w-full ${SPACING.CARD_PADDING} rounded-xl border border-white/10 bg-white/5 shadow-lg`}
+                        spotlightColor={SPOTLIGHT_CARD_CONFIG.SPOTLIGHT_COLOR}
                     >
-
-                        <p className="text-white text-lg sm:text-xl leading-relaxed text-left">
+                        <p className={`text-white ${TYPOGRAPHY.PARAGRAPH} leading-relaxed text-left`}>
                             Eu tenho experiência com diversas tecnologias essenciais para desenvolvimento web e design, incluindo{' '}
                             <span className="font-bold text-cyan-400">React, HTML, CSS, Bootstrap e Tailwind CSS</span>{' '}
                             para criar interfaces modernas e responsivas. Além disso, sei{' '}
@@ -92,16 +85,9 @@ export function AboutMe() {
                             Para design e prototipagem, uso{' '}
                             <span className="font-bold text-purple-300">Figma</span>, que me permite transformar ideias em layouts funcionais.
                         </p>
-
                     </SpotlightCard>
-
-
                 </div>
-
-            </div >
-
-
+            </div>
         </section>
-
     );
 }
