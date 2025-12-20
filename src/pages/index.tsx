@@ -13,6 +13,7 @@ import { MainProjects } from '../components/Components_Landing/MainProjects';
 export default function Home() {
   return (
     <main>
+      <title>David Soares Portfolio</title>
       <Background />
       <Navbar />
       <Hero />
